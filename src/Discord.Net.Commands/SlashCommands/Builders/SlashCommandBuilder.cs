@@ -121,10 +121,15 @@ namespace Discord.Commands.Builders
                 Description = this.Description,
             };
 
-            if(this.Options != null || this.Options.Any())
+            if(this.Options?.Any() == true)
             {
                 var options = new List<ApplicationCommandOptionProperties>();
 
+                if (this.Options.Count > MaxOptionsCount)
+                {
+                    throw new ArgumentException(message: $"Option count must be less than or equal to {MaxOptionsCount}.", paramName: nameof(Options));
+                }
+                
                 this.Options.ForEach(x => options.Add(x.Build()));
 
                 props.Options = options;
